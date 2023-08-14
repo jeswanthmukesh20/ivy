@@ -42,7 +42,7 @@ def kaiser_window(
 ) -> paddle.Tensor:
     if window_length < 2:
         return paddle.ones([window_length], dtype=dtype)
-    if periodic is False:
+    if not periodic:
         return _kaiser_window(window_length, beta).cast(dtype)
     else:
         return _kaiser_window(window_length + 1, beta)[:-1].cast(dtype)
@@ -161,7 +161,7 @@ def unsorted_segment_sum(
             res[i] = paddle.sum(data[mask_index], axis=0)
 
     # condition for converting float32 back to int32
-    if needs_conv is True:
+    if needs_conv:
         res = paddle.cast(res, "int32")
 
     return res
